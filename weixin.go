@@ -11,17 +11,17 @@ import (
 	"go.uber.org/zap"
 )
 
-type WxClient struct {
+type Client struct {
 	logger *zap.Logger
 }
 
-func NewWxClient(logger *zap.Logger) *WxClient {
-	return &WxClient{
+func NewClient(logger *zap.Logger) *Client {
+	return &Client{
 		logger: logger,
 	}
 }
 
-func (c *WxClient) Request(method, url string, query url.Values, body map[string]interface{}) ([]byte, error) {
+func (c *Client) Request(method, url string, query url.Values, body map[string]interface{}) ([]byte, error) {
 	var (
 		reqBody []byte
 	)
@@ -66,7 +66,7 @@ func (c *WxClient) Request(method, url string, query url.Values, body map[string
 
 // corpId 企业ID
 // corpSecret 应用Secret
-func (c *WxClient) GetAccessToken(corpId, corpSecret string) (string, error) {
+func (c *Client) GetAccessToken(corpId, corpSecret string) (string, error) {
 	// 调用接口返回登录信息access_token
 	method := http.MethodGet
 	path := "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
@@ -93,7 +93,7 @@ func (c *WxClient) GetAccessToken(corpId, corpSecret string) (string, error) {
 	return reply.AccessToken, nil
 }
 
-func (c *WxClient) SendMessage(message, agentId, toParty, toTag, accessToken string) error {
+func (c *Client) SendMessage(message, agentId, toParty, toTag, accessToken string) error {
 	// 发送文本消息
 	// 调用接口返回登录信息access_token
 	method := http.MethodPost
@@ -137,7 +137,7 @@ func (c *WxClient) SendMessage(message, agentId, toParty, toTag, accessToken str
 	return nil
 }
 
-func (c *WxClient) TagList(accessToken string) error {
+func (c *Client) TagList(accessToken string) error {
 	// 发送文本消息
 	// 调用接口返回登录信息access_token
 	method := http.MethodGet
